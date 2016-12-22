@@ -31,26 +31,53 @@ client.connect();
 
 //app.get('/', function(appReq, appRes) {
 
-function gettem(){
+//function gettem(){
+
+var iLastTime = 0;
+var iTime = 0;
+var iTotal = 0;
+var iKeys = 0;
+
+function checkSpeed() {
+    iTime = new Date().getTime();
+
+    if (iLastTime != 0) {
+        iKeys++;
+        iTotal += iTime - iLastTime;
+        console.log("speed: " + Math.round(iKeys / iTotal * 60000, 2));
+    }
+
+    iLastTime = iTime;
+}
 
 
 
+	var mincounter = 0;
 	counter = 0;
 
 	client.join('millapede');
 
 	client.on('chat', function(channel, user, message, self) {
 		counter++;
+		mincounter++;
+		checkSpeed();
 		console.log("Count: " + counter);
+		console.log("This min: " + mincounter);
+
 
 	});
 
 	client.on('connected', function(address, port) {
 		//client.action("millapede", "Test from bot.");	
+		client.join('imaqtpie');
+		setInterval(function(){ 
+			console.log('resetting min');
+			mincounter = 0; 
+		}, 60000);
 	});
 
 
-}
+//}
 
 //});
 
